@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using APBD11.Data;
+using APBD11.Middlewares;
 using APBD11.Services.Abstractions;
 using APBD11.Services.Implementations;
 
@@ -15,6 +16,8 @@ builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -24,6 +27,11 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseExceptionHandler();
+
+app.UseHttpsRedirection();
+app.UseAuthorization();
 
 app.MapControllers();
 
